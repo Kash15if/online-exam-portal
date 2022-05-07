@@ -10,14 +10,50 @@ import axios from "axios";
 
 function App() {
   const [user, setUser] = useState(localStorage.getItem("user"));
+  const [applicantName, setApplicantName] = useState(
+    localStorage.getItem("applicantName")
+  );
   // const [tokenApp, setTokenApp] = useState("");
 
   const navigate = useNavigate();
 
+  const onVisibilityChange = async () => {
+    if (document.visibilityState !== "visible") {
+      alert(
+        "Browser or tab switch detected, Please don't switch or open new tab"
+      );
+
+      const urlQ = process.env.REACT_APP_POST_ROUTE + "/detectuseractivity";
+
+      try {
+        await axios({
+          method: "POST",
+          url: urlQ,
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Access-Control-Allow-Origin": "*",
+            "x-access-token": "Bearer " + localStorage.getItem("token"),
+          },
+          data: {
+            userId: localStorage.getItem("user"),
+            userName: localStorage.getItem("applicantName"),
+          },
+        });
+      } catch (err) {
+        // console.log(err);
+        handleLogOut();
+      }
+
+      // console.log("tab closed or switched");
+    }
+  };
+
   useEffect(() => {
-    const tokenStored = localStorage.getItem("token");
+    // const tokenStored = localStorage.getItem("token");
     const userStored = localStorage.getItem("user");
+    const applicantNameStored = localStorage.getItem("applicantName");
     setUser(userStored);
+    setApplicantName(applicantNameStored);
     // setTokenApp(tokenStored);
   }, []);
 
@@ -29,11 +65,18 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () =>
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+  }, []);
+
   const updateClockToDb = async () => {
     const timeStoredOnMachine = localStorage.getItem("timeRemaining");
     try {
       if (timeStoredOnMachine) {
-        const res = await axios({
+        await axios({
           method: "POST",
           url: process.env.REACT_APP_POST_ROUTE + "/updatetimer",
           headers: {
@@ -54,6 +97,7 @@ function App() {
   //function for auth
   const handleAuth = (creds) => {
     setUser(creds.user);
+    setApplicantName(creds.applicantName);
     // setTokenApp(creds.token);
     navigate("home");
   };

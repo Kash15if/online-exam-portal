@@ -59,11 +59,11 @@ const ExamPage = ({ logOut }) => {
           },
         });
 
-        console.log(res.data);
+        // console.log(res.data);
         setData(res.data);
       } catch (err) {
         console.log(err);
-        logOut();
+        // logOut();
       }
     })();
   }, []);
@@ -87,7 +87,7 @@ const ExamPage = ({ logOut }) => {
           },
         });
 
-        console.log(res.data);
+        // console.log(res.data);
         setAnswers(res.data);
       } catch (error) {
         console.log(error);
@@ -154,6 +154,7 @@ const ExamPage = ({ logOut }) => {
   const instructionList = [
     "There is no negative marking.",
     " All question consists of 1 marks",
+    " Donot open new tab or window during exam",
     "Total time provided is " + localStorage.getItem("totalTime") + " minutes",
   ];
 
@@ -181,7 +182,16 @@ const ExamPage = ({ logOut }) => {
             >
               <Grid item>
                 <Chip
-                  label={"User:-  " + localStorage.getItem("user")}
+                  label={"UserId:-  " + localStorage.getItem("user")}
+                  color="success"
+                  variant="outlined"
+                />
+              </Grid>
+
+              <Grid item style={{ marginTop: "1rem" }}>
+                {" "}
+                <Chip
+                  label={"UserName:-  " + localStorage.getItem("applicantName")}
                   color="success"
                   variant="outlined"
                 />

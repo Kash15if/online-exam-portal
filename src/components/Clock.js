@@ -46,7 +46,7 @@ const Clock = ({ totalTime, timeRemaining }) => {
     setSeconds(secondsIN);
 
     if (timeInSec != 0 && timeInSec % 5 === 0) {
-      console.log(timeInSec);
+      // console.log(timeInSec);
       localStorage.setItem("timeRemaining", timeInSec);
     }
 

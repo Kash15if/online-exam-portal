@@ -44,6 +44,7 @@ const Login = ({ login, token, handleAuth, logOut }) => {
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", data.user);
     localStorage.setItem("department", data.department);
+    localStorage.setItem("applicantName", data.name);
 
     // if (!timeRemainingStored || timeRemainingStored <= 0) {
     //   localStorage.setItem("timeRemaining", data.totaltime * 60);
@@ -53,7 +54,11 @@ const Login = ({ login, token, handleAuth, logOut }) => {
 
     localStorage.setItem("totalTime", data.totaltime);
 
-    handleAuth({ user: data.user, token: data.token });
+    handleAuth({
+      user: data.user,
+      token: data.token,
+      applicantName: data.name,
+    });
     console.log(process.env.REACT_APP_AUTH_ROUTE + "/login");
   };
 

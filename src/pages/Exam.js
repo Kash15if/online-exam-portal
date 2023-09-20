@@ -36,17 +36,20 @@ const ExamPage = ({ logOut }) => {
     (async () => {
       const timeStored = localStorage.getItem("timeRemaining");
       const totalTimeStored = localStorage.getItem("totalTime");
+      const set = localStorage.getItem("set");
       setTimeRemaining(timeStored);
       setTotalTimeExam(totalTimeStored);
 
       const topic = "Java";
       const department = localStorage.getItem("department");
       const urlQ =
-        process.env.REACT_APP_GET_ROUTE +
+        "http://localhost:8081/get" +
         "/questions/" +
         topic +
         "/" +
-        department;
+        department +
+        "/" +
+        set;
 
       try {
         const res = await axios({
@@ -61,40 +64,56 @@ const ExamPage = ({ logOut }) => {
 
         // console.log(res.data);
         setData(res.data);
+
+        // const topic = "Java";
+        // const urlQ = "http://localhost:8081/get" + "/answers";
+
+        const rest = await axios({
+          method: "GET",
+          url: "http://localhost:8081/get" + "/answers",
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Access-Control-Allow-Origin": "*",
+            "x-access-token": "Bearer " + localStorage.getItem("token"),
+          },
+        });
+
+        // console.log(res.data);
+        setAnswers(rest.data);
       } catch (err) {
         console.log(err);
-        // logOut();
+        logOut();
       }
     })();
   }, []);
 
   //get saved answers on load
-  useEffect(() => {
-    (async () => {
-      const token = localStorage.getItem("token");
+  // useEffect(() => {
+  //   (async () => {
+  //     const token = localStorage.getItem("token");
 
-      // const topic = "Java";
-      const urlQ = process.env.REACT_APP_GET_ROUTE + "/answers";
+  //     // const topic = "Java";
+  //     const urlQ = process.env.REACT_APP_GET_ROUTE + "/answers";
 
-      try {
-        const res = await axios({
-          method: "GET",
-          url: urlQ,
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-            "Access-Control-Allow-Origin": "*",
-            "x-access-token": "Bearer " + token,
-          },
-        });
+  //     try {
+  //       const res = await axios({
+  //         method: "GET",
+  //         url: urlQ,
+  //         headers: {
+  //           "Content-Type": "application/json;charset=UTF-8",
+  //           "Access-Control-Allow-Origin": "*",
+  //           "x-access-token": "Bearer " + token,
+  //         },
+  //       });
 
-        // console.log(res.data);
-        setAnswers(res.data);
-      } catch (error) {
-        console.log(error);
-        logOut();
-      }
-    })();
-  }, []);
+  //       // console.log(res.data);
+  //       setAnswers(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //       logOut();
+  //     }
+  //   })();
+  // }, []);
 
   //update answers on answer submit
   const updateAnswersToDb = async (answerArray) => {
@@ -144,8 +163,9 @@ const ExamPage = ({ logOut }) => {
     skipQuestion();
     const _answerObject = answers;
 
-    _answerObject[cq] = opt;
+    _answerObject[data[cq - 1].qno] = opt;
 
+    // console.log(_answerObject, opt, data[cq - 1].qno, data[cq - 1]);
     await updateAnswersToDb(_answerObject);
 
     setAnswers(_answerObject);
@@ -153,8 +173,8 @@ const ExamPage = ({ logOut }) => {
 
   const instructionList = [
     "There is no negative marking.",
+    "Donot open new tab or window during exam",
     " All question consists of 1 marks",
-    " Donot open new tab or window during exam",
     "Total time provided is " + localStorage.getItem("totalTime") + " minutes",
   ];
 
@@ -241,7 +261,7 @@ const ExamPage = ({ logOut }) => {
                   curQuestion={data[cq - 1]}
                   handleUpdateAnswer={updateAnswers}
                   skipQNo={skipQuestion}
-                  answer={answers[cq] || ""}
+                  answer={answers[data[cq - 1].qno] || ""}
                 />
               )}
             </Box>

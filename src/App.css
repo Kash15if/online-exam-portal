@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+.question_asn_image {
+  max-width: 90vw;
+  margin: 3vw;
+}

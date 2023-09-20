@@ -67,7 +67,7 @@ const Question = ({ curQuestion, skipQNo, handleUpdateAnswer, answer }) => {
             gutterBottom
             px={5}
           >
-            Question No:- {curQuestion.qno}
+            Question No:- {curQuestion.SetQNo}
           </Typography>
           <Typography
             variant="body1"
@@ -81,6 +81,7 @@ const Question = ({ curQuestion, skipQNo, handleUpdateAnswer, answer }) => {
           </Typography>
           {curQuestion["question_image"] && (
             <img
+              className="question_asn_image"
               src={imagesDir(`./${curQuestion["question_image"]}`)}
               width="600"
               alt={curQuestion["qno"]}

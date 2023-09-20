@@ -45,6 +45,7 @@ const Login = ({ login, token, handleAuth, logOut }) => {
     localStorage.setItem("user", data.user);
     localStorage.setItem("department", data.department);
     localStorage.setItem("applicantName", data.name);
+    localStorage.setItem("set", data.set);
 
     // if (!timeRemainingStored || timeRemainingStored <= 0) {
     //   localStorage.setItem("timeRemaining", data.totaltime * 60);
@@ -96,6 +97,7 @@ const Login = ({ login, token, handleAuth, logOut }) => {
           flexDirection: "column",
           alignItems: "center",
           backgroundColor: "#DFF6E2",
+          minHeight: "100vh",
         }}
       >
         <Box

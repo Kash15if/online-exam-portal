@@ -38,7 +38,7 @@ const Home = () => {
           padding: "5rem",
         }}
       >
-        <h2>Welcome to Greenwave</h2>
+        <h2>Welcome to our Exam Portal</h2>
 
         <h4>To start your Exam , click on the button below</h4>
         <div style={{ marginTop: "8rem" }}>
